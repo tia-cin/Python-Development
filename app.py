@@ -9,5 +9,11 @@ def hello():
 
 app.run()
 
+# COMMANDS
+# python -m venv new-env
+# source new-env/Scripts/activate
+# pip install flask
+
 # FLASK_APP=flask.py flask run
 # FLASK_ENV=development
+# flask run
