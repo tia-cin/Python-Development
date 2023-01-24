@@ -12,7 +12,7 @@ def valid_word(words):
     while '-' in word or ' ' in word:
         word = random.choice(words)
 
-    return word
+    return word.upper()
 
 def hangman():
     word = valid_word(words)
@@ -20,9 +20,15 @@ def hangman():
     alphabet = set(string.ascii_uppercase)
     used_letters = set()
 
-    while len(word_letters) > 0:
+    tries = 10
+
+    while len(word_letters) > 0 and tries > 0:
         print("Your used letters: ", ' '.join(used_letters))
-        #32:01
+        
+        word_list = [letter if letter in used_letters else '-' for letter in word]
+        print("Current word: ", ' '.join(word_list))
+        print(f"Current tries: {tries}")
+
         user_letter = input("Guess a letter: ").upper()
 
         if user_letter in alphabet - used_letters:
@@ -30,12 +36,20 @@ def hangman():
 
             if(user_letter in word_letters):
                 word_letters.remove(user_letter)
+            
+            else:
+                tries = tries - 1
 
         elif user_letter in used_letters:
             print("You already used that letter, try another one!")
 
         else:
             print("Invalid character, try again!")
+
+    if tries == 0:
+        print("No more tries left. Word was", word)
+    else:
+        print("You won!")
 
 
 hangman()
