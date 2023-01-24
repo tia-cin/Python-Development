@@ -6,16 +6,8 @@ import string
 req = requests.get("https://www.randomlists.com/data/words.json")
 words = json.loads(req.text)['data']
 
-def valid_word(words):
-    word = random.choice(words)
-
-    while '-' in word or ' ' in word:
-        word = random.choice(words)
-
-    return word.upper()
-
 def hangman():
-    word = valid_word(words)
+    word = random.choice(words).upper()
     word_letters = set(word) # each letter in the word
     alphabet = set(string.ascii_uppercase)
     used_letters = set()
