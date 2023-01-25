@@ -14,7 +14,8 @@ class RandomAIPlayer(Player):
         super().__init__(letter)
 
     def get_move(self, game):
-        return random.choice(game.free_moves())
+        square = random.choice(game.free_moves())
+        return square
 
 class RandomDefaultPlayer(Player):
     def __init__(self, letter):
@@ -35,3 +36,59 @@ class RandomDefaultPlayer(Player):
                 print('Invalid square, try again!')
 
         return val
+
+class AIPlayer(Player):
+    def __init__(self, letter):
+        super().__init__(letter)
+
+    def get_move(self, game):
+        if len(game.free_moves()) == 9:
+            square = random.choice(game.free_moves())
+        else:
+            square = self.minmax(game, self.letter)['position']
+        return square
+
+    def minmax(self, state, player):
+        p_max = self.letter
+        p_random = 'O' if player == 'X' else 'X'
+
+        if state.curr_winner == p_random:
+            return {
+                'position': None,
+                'score': 1 * (state.num_empty_squares() + 1)  if p_random == p_max  else -1 * (state.num_empty_squares() + 1)
+            }
+
+        elif not state.empty_squares():
+            return {
+                'position': None,
+                'score': 0
+            }
+        
+        if player == p_max:
+            best = {
+                'position': None,
+                'score': -math.inf
+            }
+        else:
+             best = {
+                'position': None,
+                'score': math.inf
+            }
+
+        for possible_move in state.free_moves():
+            state.make_move(possible_move, player)
+
+            simulation = self.minmax(state, p_random)
+
+            state.board[possible_move] = ' '
+            state.curr_winner = None
+            simulation['position'] = possible_move
+
+            if player == p_max:
+                if simulation['score'] > best['score']:
+                    best = simulation
+            else:
+                if simulation['score'] < best['score']:
+                    best = simulation
+
+        return best

@@ -1,32 +1,38 @@
-from player import RandomAIPlayer, RandomDefaultPlayer
+from player import RandomAIPlayer, RandomDefaultPlayer, AIPlayer
 import time
-import math
 
 def play(game, px, po, print_game=True):
-    letter = 'X'
+    letter = 'X' # default player
     
     if print_game:
         game.print_board_nums()
 
-    while game.empty_squares() or game.curr_winner != None:
+    # play until there is no empty squares
+    while game.empty_squares():
+        # get move of current player
         if letter == 'O':
             square = po.get_move(game)
         else:
             square = px.get_move(game)
 
+        # make move with current player and its move
         if game.make_move(square, letter):
+            # check move
             if print_game:
                 print(f"{letter} makes a move to square {square}")
                 game.print_board()
                 print('')
             
+            # we have a winner
             if game.curr_winner:
                 if print_game:
                     print(f"{letter} wins!")
                 return letter
 
+            # once move is done, switch to other player
             letter = 'O' if letter == 'X' else 'X'
         
+        # little time 
         time.sleep(0.8)
 
     if print_game:
@@ -53,12 +59,15 @@ class TicTacToe:
             print('| ' + ' | '.join(row) + ' |')
 
     def free_moves(self):
+        # show possible moves for players
         return [ i for i, spot in enumerate(self.board) if spot == ' ' ]
 
     def empty_squares(self):
+        # blank spaces
         return ' ' in self.board
 
     def num_empty_squares(self):
+        # how many blank spaces are in board
         return len(self.free_moves())
 
     def is_winner(self, square, letter):
@@ -89,9 +98,10 @@ class TicTacToe:
         return False
         
     def make_move(self, square, letter):
+        # if square is blank, make move
         if self.board[square] == ' ':
             self.board[square] = letter
-
+            # if by last move makes winner
             if self.is_winner(square, letter):
                 self.curr_winner = letter
             return True
@@ -99,6 +109,6 @@ class TicTacToe:
         
 if __name__ == '__main__':
     px = RandomDefaultPlayer('X')
-    po = RandomAIPlayer('O')
+    po = AIPlayer('O')
     t = TicTacToe()
     play(t, px, po, print_game=True)
