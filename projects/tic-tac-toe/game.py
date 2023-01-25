@@ -1,4 +1,6 @@
 from player import RandomAIPlayer, RandomDefaultPlayer
+import time
+import math
 
 def play(game, px, po, print_game=True):
     letter = 'X'
@@ -6,7 +8,7 @@ def play(game, px, po, print_game=True):
     if print_game:
         game.print_board_nums()
 
-    while game.empty_squares():
+    while game.empty_squares() or game.curr_winner != None:
         if letter == 'O':
             square = po.get_move(game)
         else:
@@ -21,11 +23,14 @@ def play(game, px, po, print_game=True):
             if game.curr_winner:
                 if print_game:
                     print(f"{letter} wins!")
+                return letter
 
             letter = 'O' if letter == 'X' else 'X'
+        
+        time.sleep(0.8)
 
-        if print_game:
-            print("Tie!")
+    if print_game:
+        print("Tie!")
 
 
 class TicTacToe:
@@ -56,15 +61,6 @@ class TicTacToe:
     def num_empty_squares(self):
         return len(self.free_moves())
 
-    def make_move(self, square, letter):
-        if self.board[square] == ' ':
-            self.board[square] = letter
-
-            if self.is_winner(square, letter):
-                self.curr_winner = letter
-            return True
-        return False
-
     def is_winner(self, square, letter):
         # check if 3 in rows
         row_index = square // 3
@@ -75,7 +71,7 @@ class TicTacToe:
 
         # check if 3 in columms
         col_index = square % 3
-        col = [self.board[col_index * 3  + i * 3] for i in range(3)]
+        col = [self.board[col_index + i * 3] for i in range(3)]
 
         if all([spot == letter for spot in col]):
             return True
@@ -90,6 +86,15 @@ class TicTacToe:
             if all([spot == letter for spot in d2]):
                 return True
             
+        return False
+        
+    def make_move(self, square, letter):
+        if self.board[square] == ' ':
+            self.board[square] = letter
+
+            if self.is_winner(square, letter):
+                self.curr_winner = letter
+            return True
         return False
         
 if __name__ == '__main__':

@@ -25,7 +25,7 @@ class RandomDefaultPlayer(Player):
         val = None
         
         while not valid_move:
-            square = input(self.letter + '\'s turn. Write move (0-9): ')
+            square = input(self.letter + '\'s turn. Write move (0-8): ')
             try:
                 val = int(square)
                 if val not in game.free_moves():
