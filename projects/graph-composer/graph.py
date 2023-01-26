@@ -37,9 +37,9 @@ class Graph:
         return self.vertices[val]
 
     def get_next_word(self, curr_vertex):
-        self.vertices[curr_vertex.val].next.word()
+        return self.vertices[curr_vertex.val].next_word()
 
     def create_probability_mappings(self):
         for vertex in self.vertices.values():
-            vertex.get_probability.map()
+            vertex.get_probability_map()
     
