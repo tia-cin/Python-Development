@@ -30,37 +30,46 @@ class Board:
         return board
         
     def assign_values(self):
+        # scan through board
         for r in range(self.size):
             for c in range(self.size):
+                # if there is already a bomb
                 if self.board[r][c] == '*':
                     continue
+                # define count of bombs around 
                 self.board[r][c] = self.get_num_near_bombs(r, c)
 
     def get_num_near_bombs(self, row, col):
-        count = 0
+        count = 0 # trank of bombs
 
+        # scan around bomb location
         for r in range(max(0, row-1), min(self.size-1, (row+1) + 1)):
             for c in range(max(0,col-1), min(self.size-1, (col+1) + 1)):
+                # when location found
                 if row == r and c == col:
                     continue
+                # when bomb found 
                 if self.board[r][c] == '*':
-                    count += 1
+                    count += 1 # update track
 
         return count
 
     def dig(self, row, col):
-        self.dug.add((row, col))
+        self.dug.add((row, col)) # update last dug
 
+        # if bomb found
         if self.board[row][col] == '*':
             return False
+        # when return num higher than 0
         elif self.board[row][col] > 0:
             return True
 
+        # scan board
         for r in range(max(0, row-1), min(self.size-1, (row+1) + 1)):
             for c in range(max(0,col-1), min(self.size-1, (col+1) + 1)):
                 if (r, c) in self.dug:
                     continue
-                self.dig(r, c)
+                self.dig(r, c) # responsive
             
         return True
 
@@ -74,6 +83,7 @@ class Board:
                 else:
                     vision_board[row][col] = ' '
 
+        # visio board format
         string_rep = ''
         # get max column widths for printing
         widths = []
