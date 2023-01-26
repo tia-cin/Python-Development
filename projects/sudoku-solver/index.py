@@ -1,31 +1,32 @@
 def find_empty(puzzle):
-    for r in range(9):
+    for r in range(9): # scan board
         for c in range(9):
-            if puzzle[r][c] == -1:
-                return r, c
+            if puzzle[r][c] == -1: 
+                return r, c # return location of empty space
     return None, None
 
 def is_valid(puzzle, guess, row, col):
+    # rows
     row_vals = puzzle[row]
-
-    if guess in row_vals:
-        return False
-
+    if guess in row_vals: 
+        return False # guess found in row
+    
+    # columns
     col_vals = []
     for i in range(9):
         col_vals.append(puzzle[i][col])
 
     col_vals = [puzzle[i][col] for i in range(9)]
     if guess in col_vals:
-        return False
+        return False # guess found in column
 
     row_start = (row // 3) * 3
     col_start = (col // 3) * 3
 
-    for r in range(row_start, row_start + 3):
+    for r in range(row_start, row_start + 3): #scan
         for c in range(col_start, col_start + 3):
             if puzzle[r][c] == guess:
-                return False
+                return False # guess found in location
     
     return True
 
@@ -36,16 +37,16 @@ def solve(puzzle):
     if row is None:
         return True
 
-    for guess in range(1, 10):
-        if is_valid(puzzle, guess, row, col):
-            puzzle[row][col] = guess
+    for guess in range(1, 10): # nums from 1 to 9 (included)
+        if is_valid(puzzle, guess, row, col): 
+            puzzle[row][col] = guess # set correct guess in location
 
-            if solve(puzzle):
+            if solve(puzzle): # keep guessing
                 return True
 
-        puzzle[row][col] = -1
+        puzzle[row][col] = -1 # if not guessed keep blank
     
-    return False
+    return False # sudoku cannot be resolved
 
 if __name__ == '__main__':
     example_board = [
