@@ -3,30 +3,40 @@ import time
 def merge_sort(vals):
     start = time.time()
     
+    # at least two items
     if len(vals) > 1:
+        # split arr in halft
         left = vals[:len(vals) // 2]
         right = vals[len(vals) // 2:]
 
+        # recursion
         merge_sort(left)
         merge_sort(right)
 
-        l, r = 0, 0
+        # set indexes
+        l, r = 0, 0 # left_index, right_index
         k = 0
 
+        # as long as both indexes are lower than their arrs
         while l < len(left) and r < len(right):
+            # when curr left val is lower than right curr val
             if left[l] < right[r]:
-                vals[k] = left[l]
-                l += 1
-            else:
+                vals[k] = left[l] # update original arr
+                l += 1 # move to next
+            else: # if right one was lower
                 vals[k] = right[r]
                 r += 1
-            k += 1
-        
+            k += 1 # update original curr index
+
+        # as log as left index is lower than its arr        
         while l < len(left):
+            # curr original val is left curr val
             vals[k] = left[l]
+            # update indexes
             l += 1
             k += 1
 
+        # same with right arr and index
         while r < len(right):
             vals[k] = right[r]
             r += 1
