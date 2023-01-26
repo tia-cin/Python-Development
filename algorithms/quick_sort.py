@@ -1,19 +1,25 @@
 import time
 
 def partition(vals, left, right):
+    # set indexes & pivot (random value in the vals)
     l, r = left, right
     pivot = vals[right]
 
+    # as long as left index is lower than right one
     while l < r:
+        # when left ind is lower and left indexed val is less than pivot
         while l < right and vals[l] < pivot:
-            l += 1
+            l += 1 # update left index
+        # when right ind is bigger and right indexed val is bigger or equal to pivot
         while r > left and vals[r] >= pivot:
-            r -= 1
+            r -= 1 # update right index
 
+        # switch if left index is lower
         if l < r:
             vals[l], vals[r] = vals[r], vals[l]
         print(vals)
     
+    # switch if left indexed val is bigger than pivot
     if vals[l] > pivot:
         vals[l], vals[right] = vals[right], vals[l]
 
@@ -23,15 +29,16 @@ def partition(vals, left, right):
 def quick_sort(vals, left, right):
     start = time.time()
 
+    # left (first index)
+    # right (last index)
     if left < right:
         partition_position = partition(vals, left, right)
 
+        # recursion
         quick_sort(vals, left, partition_position - 1)
         quick_sort(vals, partition_position + 1, right)
 
 
-
-    
     end = time.time()
     print(f"Time: {end - start}")
 
