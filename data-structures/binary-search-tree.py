@@ -28,3 +28,33 @@ class BinaryTree:
                 self.insert(val, node.right)
             else: 
                 node.right = Node(val)
+        
+    def show_tree(self, ver = 'in'):
+        if self.root != None:
+            if ver == 'in':
+                self.print_in(self.root)
+            elif ver == 'prev':
+                self.print_pre(self.root)
+            elif ver == 'post':
+                self.print_post(self.root)
+
+    def print_in(self, node):
+        if node == Node:
+            return
+        self.print_in(node.left)
+        print(node.val)
+        self.print_in(node.right)
+
+    def print_pre(self, node):
+        if node == None:
+            return
+        print(node.val)
+        self.print_pre(node.left)
+        self.print_pre(node.right)
+
+    def print_post(self, node):
+        if node == None:
+            return
+        self.print_post(node.left)
+        self.print_post(node.right)
+        print(node.val)
