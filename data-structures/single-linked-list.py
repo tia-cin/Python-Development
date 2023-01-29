@@ -6,15 +6,18 @@ class Node:
     
 class SingleLinkedList:
     def __init__(self):
-        self.head = Node("List")
+        self.head = Node()
 
     def add(self, data):
         node = Node(data)
         curr = self.head
 
-        while curr.next != None:
-            curr = curr.next
-        curr.next = node
+        if curr == None:
+            curr = node
+        else: 
+            while curr.next != None:
+                curr = curr.next
+            curr.next = node
 
     def length(self):
         curr = self.head
@@ -31,8 +34,8 @@ class SingleLinkedList:
         curr = self.head
 
         while curr.next != None:
-            all_items.append(curr.data)
             curr = curr.next
+            all_items.append(curr.data)
         
         print(all_items)
 
@@ -87,8 +90,6 @@ if __name__ == '__main__':
 
     for num in range(10):
         l.add(num)
-
-    l.show_list()
 
     l.get_item(3)
 
