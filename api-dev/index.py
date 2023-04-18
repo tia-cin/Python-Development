@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.params import Body
 from pydantic import BaseModel
+from typing import Optional
 
 app = FastAPI()
 
@@ -16,7 +17,8 @@ class Post(BaseModel):
     likes: int = 0
     user: str = 'user'
     comments: Comment
-    private: bool = True
+    private: Optional[bool] = True
+    rating: Optional[int] = None
 
 # GET routes
 @app.get("/")
