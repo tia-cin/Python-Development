@@ -36,4 +36,3 @@ def create_post(new_post: Post):
     print(new_post)
     return {"new post"}
     # return {"newPost": f"title {new_post['title']} content: {new_post['content']}"}
-
