@@ -5,18 +5,17 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class Comment(BaseModel):
-    user = "user comment"
+    user: str = "user comment"
     comment: str
-    likes = 0
+    likes: int = 0
 
 class Post(BaseModel):
     title: str
     content: str
-    likes = 0
-    user = 'user'
+    likes: int = 0
+    user: str = 'user'
     comments: Comment
-
-
+    private: bool = True
 
 @app.get("/")
 def root():
