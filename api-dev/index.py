@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+# classes
 class Comment(BaseModel):
     user: str = "user comment"
     comment: str
@@ -17,6 +18,7 @@ class Post(BaseModel):
     comments: Comment
     private: bool = True
 
+# GET routes
 @app.get("/")
 def root():
     return {"message": "Hello API"}
@@ -25,6 +27,8 @@ def root():
 def get_posts():
     return {"posts": [1,2,3,4]}
 
+
+# POST routes
 @app.post('/posts')
 def create_post(new_post: Post):
     print(new_post)
