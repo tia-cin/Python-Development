@@ -5,15 +5,15 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class Comment(BaseModel):
-    user: str
+    user = "user comment"
     comment: str
-    likes: int
+    likes = 0
 
 class Post(BaseModel):
     title: str
     content: str
-    likes: int
-    user: str
+    likes = 0
+    user = 'user'
     comments: Comment
 
 
@@ -28,6 +28,7 @@ def get_posts():
 
 @app.post('/posts')
 def create_post(new_post: Post):
-    print(payload)
-    return {"newPost": f"title {payload['title']} content: {payload['content']}"}
+    print(new_post)
+    return {"new post"}
+    # return {"newPost": f"title {new_post['title']} content: {new_post['content']}"}
 
