@@ -7,55 +7,30 @@ from random import randrange
 app = FastAPI()
 
 # classes
-class Comment(BaseModel):
-    user: str = "user comment"
-    comment: str
-    likes: int = 0
-    comment_id: int = 0
-
 class Post(BaseModel):
-    post_id: int = 0
+    id: int = 0
     title: str
     content: str
     likes: int = 0
-    user: str = 'user'
-    comments: Comment
     private: Optional[bool] = True
     rating: Optional[int] = None
 
-class User(BaseModel):
-    user_id: int = 0
-    username: str
-    email: str
-    followers: Optional[int] = 0
-    following: Optional[int] = 0
-    posts: List[Post] = None
 
 user_posts = [{
     "title": "TEST 1",
     "content": "test 1",
     "likes": 0,
-    "user": "user test 1",
-    "comments": {
-      "user": "user comment 1",
-      "comment": "testing 1",
-      "likes": 0
-    }
+    "id": 1
   }, {
     "title": "TEST 2",
     "content": "test 2",
     "likes": 0,
-    "user": "user test 2",
-    "comments": {
-      "user": "user comment 2",
-      "comment": "testing 2",
-      "likes": 0
-    }
+    "id": 2
   }]
 
 def find_post(id):
     for post in user_posts:
-        if post['post_id'] == id:
+        if post['id'] == id:
             return post
 
 # GET routes
@@ -77,6 +52,6 @@ def create_post(new_post: Post):
     return {"new_post": post_dict}
 
 @app.get('/posts/{id}')
-def get_post(id):
+def get_post(id: int):
     post = find_post(id)
     return {"post_detail": f"Post detail of post {id}"}
