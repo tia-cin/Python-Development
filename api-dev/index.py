@@ -50,7 +50,7 @@ def get_lastest_posts():
 @app.get('/posts/{id}')
 def get_post(id: int):
     post = find_post(id)
-    return {"post_detail": f"Post detail of post {id}"}
+    return {"post_detail": post}
 
 # POST routes
 @app.post('/posts')
