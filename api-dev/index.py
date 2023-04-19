@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional, List
@@ -48,8 +48,10 @@ def get_lastest_posts():
     return {"lastest_posts": post}
 
 @app.get('/posts/{id}')
-def get_post(id: int):
+def get_post(id: int, res: Response):
     post = find_post(id)
+    if not post:
+        raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail=f"Post {id} was not found")
     return {"post_detail": post}
 
 # POST routes
