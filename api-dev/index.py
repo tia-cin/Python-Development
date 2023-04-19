@@ -42,6 +42,15 @@ def root():
 def get_posts():
     return {"posts": user_posts}
 
+@app.get("/posts/lastest")
+def get_lastest_posts():
+    post = user_posts[len(user_posts)-1]
+    return {"lastest_posts": post}
+
+@app.get('/posts/{id}')
+def get_post(id: int):
+    post = find_post(id)
+    return {"post_detail": f"Post detail of post {id}"}
 
 # POST routes
 @app.post('/posts')
@@ -50,8 +59,3 @@ def create_post(new_post: Post):
     post_dict['post_id'] = randrange(0, 1000000)
     user_posts.append(post_dict)
     return {"new_post": post_dict}
-
-@app.get('/posts/{id}')
-def get_post(id: int):
-    post = find_post(id)
-    return {"post_detail": f"Post detail of post {id}"}
