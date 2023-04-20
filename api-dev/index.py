@@ -33,6 +33,11 @@ def find_post(id):
         if post['id'] == id:
             return post
 
+def find_index_post(id):
+    for i, p in enumerate(user_posts):
+        if p['id'] == id:
+            return i
+
 # GET routes
 @app.get("/")
 def root():
@@ -55,9 +60,18 @@ def get_post(id: int, res: Response):
     return {"post_detail": post}
 
 # POST routes
-@app.post('/posts')
+@app.post('/posts', status_code=status.HTTP_201_CREATED)
 def create_post(new_post: Post):
     post_dict = new_post.dict()
     post_dict['post_id'] = randrange(0, 1000000)
     user_posts.append(post_dict)
     return {"new_post": post_dict}
+
+# DELETE routes
+@app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(id: int):
+    index = find_index_post(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post {id} does not exists")
+    user_posts.pop(index)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
