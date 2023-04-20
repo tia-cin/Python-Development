@@ -53,7 +53,7 @@
   - Sudoku Solver
   - Tic-Tac-Toe
   - [API Development](https://github.com/tia-cin/Python-Web-Development/tree/main/api-dev)
-  - API provides access to a database of posts, and allows users to retrieve, create, update, and delete posts
+  - API provides access to a database, and allows users to retrieve, create, update, and delete data
   - API design fundamentals, including routes, serialization/deserialization, schema validation, and models
   - SQL database integration
   - Testing with pytest
