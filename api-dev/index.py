@@ -72,6 +72,17 @@ def create_post(new_post: Post):
 def delete_post(id: int):
     index = find_index_post(id)
     if index == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post {id} does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post {id} was not found")
     user_posts.pop(index)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+# PUT routes
+@app.put("/posts/{id}")
+def update_post(id: int, post: Post):
+    index = find_index_post(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post {id} was not found")
+    post_dict = post.dict()
+    post_dict['id'] = id
+    user_posts[index] = post_dict
+    return {"updated_post": post_dict}
