@@ -5,10 +5,9 @@
 
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/tia-cin/python-web-development?color=56BEB8">
 
+  <img alt="Github issues" src="https://img.shields.io/github/issues/tia-cin/python-web-development?color=56BEB8" />
 
-  <img alt="Github issues" src="https://img.shields.io/github/issues/tia-cin/python-web-development?color=56BEB8" /> 
-
-  <img alt="Github forks" src="https://img.shields.io/github/forks/tia-cin/python-web-development?color=56BEB8" /> 
+  <img alt="Github forks" src="https://img.shields.io/github/forks/tia-cin/python-web-development?color=56BEB8" />
 
   <img alt="Github stars" src="https://img.shields.io/github/stars/tia-cin/python-web-development?color=56BEB8" /> 
 </p>
@@ -21,7 +20,7 @@
 
 <br>
 
-## :dart: About ##
+## :dart: About
 
 - [Algorythms](https://github.com/tia-cin/Python-Web-Development/tree/main/algorithms)
   - Binary Search
@@ -44,6 +43,7 @@
   - Stack
   - Trie
 - [Projects](https://github.com/tia-cin/Python-Web-Development/tree/main/projects)
+
   - Graph Composer
   - Guess the Number
   - Hangman
@@ -52,8 +52,14 @@
   - Rock-Paper-Scissors
   - Sudoku Solver
   - Tic-Tac-Toe
-  
-  ## :white_check_mark: Requirements ##
+  - [API Development](https://github.com/tia-cin/Python-Web-Development/tree/main/api-dev)
+  - API provides access to a database of posts, and allows users to retrieve, create, update, and delete posts
+  - API design fundamentals, including routes, serialization/deserialization, schema validation, and models
+  - SQL database integration
+  - Testing with pytest
+  - Building a CI/CD pipeline using GitHub actions.
+
+  ## :white_check_mark: Requirements
 
 Before starting :checkered_flag:, you need to have [Git](https://git-scm.com), [Node](https://nodejs.org/en/) & [Python](https://www.python.org/) installed.
 
