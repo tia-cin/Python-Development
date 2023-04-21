@@ -95,10 +95,11 @@ def get_post(id: int, res: Response):
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
 def create_post(new_post: Post):
     cursor.execute(
-        """INSERT INTO posts (id, title, content, private) VALUES (%s, %s, %s, %s)""",
-        (uuid.uuid4(), new_post.title, new_post.content, new_post.private)
+        """INSERT INTO posts (id, title, content, private) VALUES (%s, %s, %s, %s) RETURNING *;""",
+        (str(uuid.uuid1()), new_post.title, new_post.content, new_post.private)
     )
-    return {"new_post": post_dict}
+    created_post = cursor.fetchone()
+    return {"new_post": created_post}
 
 # DELETE routes
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
