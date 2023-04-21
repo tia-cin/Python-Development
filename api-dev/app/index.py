@@ -82,10 +82,10 @@ def get_lastest_posts():
 
 
 @app.get('/posts/{id}')
-def get_post(id: str, res: Response):
-    cursor.execute("""SELECT * FROM posts WHERE id = %s """, (str(id)))
+def get_post(id: str):
+    # cursor.execute("""SELECT * from posts WHERE id = %s ; """, (str(id)))
+    cursor.execute("""SELECT * FROM posts WHERE id = %s;""", (id,))
     post = cursor.fetchone()
-    print(post)
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
