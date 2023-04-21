@@ -82,8 +82,10 @@ def get_lastest_posts():
 
 
 @app.get('/posts/{id}')
-def get_post(id: int, res: Response):
-    post = find_post(id)
+def get_post(id: str, res: Response):
+    cursor.execute("""SELECT * FROM posts WHERE id = %s """, (str(id)))
+    post = cursor.fetchone()
+    print(post)
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -96,9 +98,10 @@ def get_post(id: int, res: Response):
 def create_post(new_post: Post):
     cursor.execute(
         """INSERT INTO posts (id, title, content, private) VALUES (%s, %s, %s, %s) RETURNING *;""",
-        (str(uuid.uuid1()), new_post.title, new_post.content, new_post.private)
+        (str(uuid.uuid4()), new_post.title, new_post.content, new_post.private)
     )
     created_post = cursor.fetchone()
+    conn.commit()
     return {"new_post": created_post}
 
 # DELETE routes
