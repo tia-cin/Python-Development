@@ -63,6 +63,9 @@ def root():
 
 @app.get("/posts")
 def get_posts():
+    cursor.execute("""SELECT * FROM posts """)
+    posts = cursor.fetchall()
+    print(posts)
     return {"posts": user_posts}
 
 @app.get("/posts/lastest")
