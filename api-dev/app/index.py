@@ -3,6 +3,9 @@ from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional, List
 from random import randrange
+import psycopg2
+from psycopg2.extras import RealDictCursor
+import time
 
 app = FastAPI()
 
@@ -11,9 +14,24 @@ class Post(BaseModel):
     id: int = 0
     title: str
     content: str
-    likes: int = 0
-    private: Optional[bool] = True
-    rating: Optional[int] = None
+    likes: Optional[int] = 0
+    private: bool = True
+
+while True:
+    try:
+        conn = psycopg2.connect(
+            host="localhost", 
+            database="apidev", 
+            user="postgres", 
+            password="data123", 
+            cursor_factory=RealDictCursor
+        )
+        cursor = conn.cursor()
+        print("Database connected")
+        break
+    except Exception as error:
+        print("Connection failed, Error:", error)
+        time.sleep(2)
 
 
 user_posts = [{
