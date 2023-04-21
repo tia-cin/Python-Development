@@ -77,8 +77,9 @@ def get_posts():
 
 @app.get("/posts/lastest")
 def get_lastest_posts():
-    post = user_posts[len(user_posts)-1]
-    return {"lastest_posts": post}
+    cursor.execute("""SELECT * FROM posts ORDER BY created_at LIMIT 5;""")
+    posts = cursor.fetchall()
+    return {"lastest_posts": posts}
 
 
 @app.get('/posts/{id}')
