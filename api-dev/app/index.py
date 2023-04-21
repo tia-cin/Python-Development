@@ -83,7 +83,6 @@ def get_lastest_posts():
 
 @app.get('/posts/{id}')
 def get_post(id: str):
-    # cursor.execute("""SELECT * from posts WHERE id = %s ; """, (str(id)))
     cursor.execute("""SELECT * FROM posts WHERE id = %s;""", (id,))
     post = cursor.fetchone()
     if not post:
@@ -106,14 +105,15 @@ def create_post(new_post: Post):
 
 # DELETE routes
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: int):
-    index = find_index_post(id)
-    if index == None:
+def delete_post(id: str):
+    cursor.execute("""DELETE FROM posts WHERE id = %s RETURNING *;""", (id,))
+    deleted_post = cursor.fetchone()
+    conn.commit()
+    if deleted_post == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post {id} was not found"
         )
-    user_posts.pop(index)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # PUT routes
