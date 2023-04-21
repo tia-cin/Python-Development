@@ -6,6 +6,7 @@ from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
+import uuid
 
 app = FastAPI()
 
@@ -17,13 +18,14 @@ class Post(BaseModel):
     likes: Optional[int] = 0
     private: bool = True
 
+# DataBase connection
 while True:
     try:
         conn = psycopg2.connect(
-            host="localhost", 
-            database="apidev", 
-            user="postgres", 
-            password="data123", 
+            host="localhost",
+            database="apidev",
+            user="postgres",
+            password="data123",
             cursor_factory=RealDictCursor
         )
         cursor = conn.cursor()
@@ -33,23 +35,25 @@ while True:
         print("Connection failed, Error:", error)
         time.sleep(2)
 
-
+# Fake data for testing
 user_posts = [{
     "title": "TEST 1",
     "content": "test 1",
     "likes": 0,
     "id": 1
-  }, {
+}, {
     "title": "TEST 2",
     "content": "test 2",
     "likes": 0,
     "id": 2
-  }]
+}]
 
+# functions for testing
 def find_post(id):
     for post in user_posts:
         if post['id'] == id:
             return post
+
 
 def find_index_post(id):
     for i, p in enumerate(user_posts):
@@ -59,33 +63,41 @@ def find_index_post(id):
 # GET routes
 @app.get("/")
 def root():
-    return {"message": "Hello API"}
+    return {
+        "message": "Go to '/docs' to read the documentation of the API and get started!"
+    }
+
 
 @app.get("/posts")
 def get_posts():
-    cursor.execute("""SELECT * FROM posts """)
+    cursor.execute("""SELECT * FROM posts;""")
     posts = cursor.fetchall()
-    print(posts)
-    return {"posts": user_posts}
+    return {"posts": posts}
+
 
 @app.get("/posts/lastest")
 def get_lastest_posts():
     post = user_posts[len(user_posts)-1]
     return {"lastest_posts": post}
 
+
 @app.get('/posts/{id}')
 def get_post(id: int, res: Response):
     post = find_post(id)
     if not post:
-        raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail=f"Post {id} was not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post {id} was not found"
+        )
     return {"post_detail": post}
 
 # POST routes
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
 def create_post(new_post: Post):
-    post_dict = new_post.dict()
-    post_dict['id'] = randrange(0, 1000000)
-    user_posts.append(post_dict)
+    cursor.execute(
+        """INSERT INTO posts (id, title, content, private) VALUES (%s, %s, %s, %s)""",
+        (uuid.uuid4(), new_post.title, new_post.content, new_post.private)
+    )
     return {"new_post": post_dict}
 
 # DELETE routes
@@ -93,7 +105,10 @@ def create_post(new_post: Post):
 def delete_post(id: int):
     index = find_index_post(id)
     if index == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post {id} was not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post {id} was not found"
+        )
     user_posts.pop(index)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -102,7 +117,8 @@ def delete_post(id: int):
 def update_post(id: int, post: Post):
     index = find_index_post(id)
     if index == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post {id} was not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Post {id} was not found")
     post_dict = post.dict()
     post_dict['id'] = id
     user_posts[index] = post_dict
