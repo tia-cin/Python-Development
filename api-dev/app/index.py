@@ -118,12 +118,14 @@ def delete_post(id: str):
 
 # PUT routes
 @app.put("/posts/{id}")
-def update_post(id: int, post: Post):
-    index = find_index_post(id)
-    if index == None:
+def update_post(id: str, post: Post):
+    cursor.execute(
+        """UPDATE posts SET title = %s, content = %s, private = %s WHERE id = %s RETURNING *;""", 
+        (post.title, post.content, post.private, id)
+    )
+    updated_post = cursor.fetchone()
+    conn.commit()
+    if updated_post == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Post {id} was not found")
-    post_dict = post.dict()
-    post_dict['id'] = id
-    user_posts[index] = post_dict
-    return {"updated_post": post_dict}
+    return {"updated_post": updated_post}
