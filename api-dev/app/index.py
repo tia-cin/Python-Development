@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional, List
@@ -9,6 +9,7 @@ import time
 import uuid
 from . import models
 from .db import engine, SessionLocal
+from sqlalchemy.orm import Session
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -65,6 +66,10 @@ def root():
     return {
         "message": "Go to '/docs' to read the documentation of the API and get started!"
     }
+
+@app.get("/sqlalchemy")
+def testing(db: Session = Depends(get_db)):
+    return {"status": "success"}
 
 
 @app.get("/posts")
