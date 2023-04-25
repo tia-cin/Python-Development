@@ -89,8 +89,8 @@ def get_post(id: str):
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
 def create_post(new_post: Post):
     cursor.execute(
-        """INSERT INTO posts (id, title, content, private) VALUES (%s, %s, %s, %s) RETURNING *;""",
-        (str(uuid.uuid4()), new_post.title, new_post.content, new_post.private)
+        """INSERT INTO posts (title, content, private) VALUES (%s, %s, %s) RETURNING *;""",
+        (new_post.title, new_post.content, new_post.private)
     )
     created_post = cursor.fetchone()
     conn.commit()
