@@ -7,5 +7,5 @@ class Posts(Base):
     id = Column(UUID, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
-    likes = Column(Integer, default=0)
-    private = Column(Boolean, default=True)
+    likes = Column(Integer, server_default='0')
+    private = Column(Boolean, server_default='TRUE')
