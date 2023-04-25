@@ -7,6 +7,10 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
 import uuid
+from . import models
+from .db import engine, SessionLocal
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -17,6 +21,14 @@ class Post(BaseModel):
     content: str
     likes: Optional[int] = 0
     private: bool = True
+
+# DB Dependency
+def get_db():
+    d = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # DataBase connection
 while True:
@@ -34,19 +46,6 @@ while True:
     except Exception as error:
         print("Connection failed, Error:", error)
         time.sleep(2)
-
-# Fake data for testing
-user_posts = [{
-    "title": "TEST 1",
-    "content": "test 1",
-    "likes": 0,
-    "id": 1
-}, {
-    "title": "TEST 2",
-    "content": "test 2",
-    "likes": 0,
-    "id": 2
-}]
 
 # functions for testing
 def find_post(id):
