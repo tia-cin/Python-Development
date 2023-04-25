@@ -8,7 +8,7 @@ from psycopg2.extras import RealDictCursor
 import time
 import uuid
 from . import models
-from .db import engine, SessionLocal
+from .db import engine, get_db
 from sqlalchemy.orm import Session
 
 models.Base.metadata.create_all(bind=engine)
@@ -23,13 +23,6 @@ class Post(BaseModel):
     likes: Optional[int] = 0
     private: bool = True
 
-# DB Dependency
-def get_db():
-    d = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # DataBase connection
 while True:
@@ -47,18 +40,6 @@ while True:
     except Exception as error:
         print("Connection failed, Error:", error)
         time.sleep(2)
-
-# functions for testing
-def find_post(id):
-    for post in user_posts:
-        if post['id'] == id:
-            return post
-
-
-def find_index_post(id):
-    for i, p in enumerate(user_posts):
-        if p['id'] == id:
-            return i
 
 # GET routes
 @app.get("/")
