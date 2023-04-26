@@ -17,7 +17,6 @@ app = FastAPI()
 
 # classes
 class Post(BaseModel):
-    id: Optional[UUID]
     title: str
     content: str
     likes: Optional[int] = 0
@@ -113,7 +112,7 @@ def delete_post(id: UUID, db: Session = Depends(get_db)):
 @app.put("/posts/{id}")
 def update_post(id: UUID, post: Post, db: Session = Depends(get_db)):
     updated_post = db.query(models.Posts).filter(models.Posts.id == id)
-    
+
     if updated_post.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Post {id} was not found")
