@@ -10,3 +10,9 @@ class PostBase(BaseModel):
 
 class PostCreate(PostBase):
     pass
+
+class ProductBase(BaseModel):
+    name: str
+    price: int = 0
+    is_sale: bool
+    inventory: int = 0
