@@ -1,27 +1,17 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
-from pydantic import BaseModel
-from typing import Optional, List
 from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
 from uuid import uuid4, UUID
-from . import models
+from . import models, schemas
 from .db import engine, get_db
 from sqlalchemy.orm import Session
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-# classes
-class Post(BaseModel):
-    title: str
-    content: str
-    likes: Optional[int] = 0
-    private: bool = True
-
 
 # DataBase connection
 while True:
@@ -86,7 +76,7 @@ def get_post(id: UUID, db: Session = Depends(get_db)):
 
 # POST routes
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
-def create_post(new_post: Post, db: Session = Depends(get_db)):
+def create_post(new_post: schemas.Post, db: Session = Depends(get_db)):
     created_post = models.Posts(**new_post.dict())
     db.add(created_post)
     db.commit()
@@ -110,7 +100,7 @@ def delete_post(id: UUID, db: Session = Depends(get_db)):
 
 # PUT routes
 @app.put("/posts/{id}")
-def update_post(id: UUID, post: Post, db: Session = Depends(get_db)):
+def update_post(id: UUID, post: schemas.Post, db: Session = Depends(get_db)):
     updated_post = db.query(models.Posts).filter(models.Posts.id == id)
 
     if updated_post.first() == None:
