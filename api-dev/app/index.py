@@ -76,7 +76,7 @@ def get_post(id: UUID, db: Session = Depends(get_db)):
 
 # POST routes
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
-def create_post(new_post: schemas.Post, db: Session = Depends(get_db)):
+def create_post(new_post: schemas.PostCreate, db: Session = Depends(get_db)):
     created_post = models.Posts(**new_post.dict())
     db.add(created_post)
     db.commit()
@@ -100,7 +100,7 @@ def delete_post(id: UUID, db: Session = Depends(get_db)):
 
 # PUT routes
 @app.put("/posts/{id}")
-def update_post(id: UUID, post: schemas.Post, db: Session = Depends(get_db)):
+def update_post(id: UUID, post: schemas.PostCreate, db: Session = Depends(get_db)):
     updated_post = db.query(models.Posts).filter(models.Posts.id == id)
 
     if updated_post.first() == None:
