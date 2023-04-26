@@ -31,18 +31,6 @@ while True:
         time.sleep(2)
 
 # GET routes
-@app.get("/")
-def root():
-    return {
-        "message": "Go to '/docs' to read the documentation of the API and get started!"
-    }
-
-@app.get("/sqlalchemy")
-def testing(db: Session = Depends(get_db)):
-    posts = db.query(models.Posts).all()
-    return {"all_posts": posts}
-
-
 @app.get("/posts")
 def get_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).all()
