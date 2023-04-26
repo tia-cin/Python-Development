@@ -6,7 +6,7 @@ from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
-import uuid
+from uuid import uuid4, UUID
 from . import models
 from .db import engine, get_db
 from sqlalchemy.orm import Session
@@ -17,7 +17,7 @@ app = FastAPI()
 
 # classes
 class Post(BaseModel):
-    id: int = 0
+    id: Optional[UUID]
     title: str
     content: str
     likes: Optional[int] = 0
@@ -86,13 +86,17 @@ def get_post(id: str):
 
 # POST routes
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
-def create_post(new_post: Post):
-    cursor.execute(
-        """INSERT INTO posts (title, content, private) VALUES (%s, %s, %s) RETURNING *;""",
-        (new_post.title, new_post.content, new_post.private)
-    )
-    created_post = cursor.fetchone()
-    conn.commit()
+def create_post(new_post: Post, db: Session = Depends(get_db)):
+    # cursor.execute(
+    #     """INSERT INTO posts (title, content, private) VALUES (%s, %s, %s) RETURNING *;""",
+    #     (new_post.title, new_post.content, new_post.private)
+    # )
+    # created_post = cursor.fetchone()
+    # conn.commit()
+    created_post = models.Posts(**new_post.dict())
+    db.add(created_post)
+    db.commit()
+    db.refresh(created_post)
     return {"new_post": created_post}
 
 # DELETE routes
