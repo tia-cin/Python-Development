@@ -55,10 +55,9 @@ def testing(db: Session = Depends(get_db)):
 
 
 @app.get("/posts")
-def get_posts():
-    cursor.execute("""SELECT * FROM posts;""")
-    posts = cursor.fetchall()
-    return {"posts": posts}
+def get_posts(db: Session = Depends(get_db)):
+    posts = db.query(models.Posts).all()
+    return {"all_posts": posts}
 
 
 @app.get("/posts/lastest")
