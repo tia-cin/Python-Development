@@ -96,15 +96,17 @@ def create_post(new_post: Post, db: Session = Depends(get_db)):
 
 # DELETE routes
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: str):
-    cursor.execute("""DELETE FROM posts WHERE id = %s RETURNING *;""", (id,))
-    deleted_post = cursor.fetchone()
-    conn.commit()
-    if deleted_post == None:
+def delete_post(id: UUID, db: Session = Depends(get_db)):
+    deleted_post = db.query(models.Posts).filter(models.Posts.id == id)
+
+    if deleted_post.first() == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post {id} was not found"
         )
+
+    deleted_post.delete(synchronize_session=False)
+    db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # PUT routes
