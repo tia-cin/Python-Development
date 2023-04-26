@@ -74,25 +74,20 @@ def get_lastest_posts():
 
 
 @app.get('/posts/{id}')
-def get_post(id: str):
-    cursor.execute("""SELECT * FROM posts WHERE id = %s;""", (id,))
-    post = cursor.fetchone()
+def get_post(id: UUID, db: Session = Depends(get_db)):
+    post = db.query(models.Posts).filter(models.Posts.id == id).first()
+
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post {id} was not found"
         )
+
     return {"post_detail": post}
 
 # POST routes
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
 def create_post(new_post: Post, db: Session = Depends(get_db)):
-    # cursor.execute(
-    #     """INSERT INTO posts (title, content, private) VALUES (%s, %s, %s) RETURNING *;""",
-    #     (new_post.title, new_post.content, new_post.private)
-    # )
-    # created_post = cursor.fetchone()
-    # conn.commit()
     created_post = models.Posts(**new_post.dict())
     db.add(created_post)
     db.commit()
