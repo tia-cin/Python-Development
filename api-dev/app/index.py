@@ -8,6 +8,7 @@ from uuid import uuid4, UUID
 from . import models, schemas
 from .db import engine, get_db
 from sqlalchemy.orm import Session
+from typing import List
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -31,18 +32,18 @@ while True:
         time.sleep(2)
 
 # GET routes
-@app.get("/posts")
+@app.get("/posts", response_model=List[schemas.Post])
 def get_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).all()
     return posts
 
 
-@app.get("/posts/lastest")
+@app.get("/posts/lastest", response_model=List[schemas.Post])
 def get_lastest_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).order_by(models.Posts.created_at).limit(5).all()
     return posts
 
-@app.get("/posts/public")
+@app.get("/posts/public", response_model=List[schemas.Post])
 def get_lastest_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).filter(models.Posts.private == False).all()
 
