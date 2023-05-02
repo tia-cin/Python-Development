@@ -45,8 +45,7 @@ def get_lastest_posts():
 
 @app.get("/posts/public")
 def get_lastest_posts():
-    cursor.execute("""SELECT * FROM posts WHERE private = false;""")
-    posts = cursor.fetchall()
+    posts = db.query(models.Posts).filter(models.Posts.private == False).all()
     return posts
 
 
