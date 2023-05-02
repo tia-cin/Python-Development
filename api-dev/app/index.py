@@ -38,13 +38,12 @@ def get_posts(db: Session = Depends(get_db)):
 
 
 @app.get("/posts/lastest")
-def get_lastest_posts():
-    cursor.execute("""SELECT * FROM posts ORDER BY created_at LIMIT 5;""")
-    posts = cursor.fetchall()
+def get_lastest_posts(db: Session = Depends(get_db)):
+    posts = db.query(models.Posts).order_by(model.Posts.created_at).limit(5).all()
     return posts
 
 @app.get("/posts/public")
-def get_lastest_posts():
+def get_lastest_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).filter(models.Posts.private == False).all()
     return posts
 
