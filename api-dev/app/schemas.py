@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
@@ -18,8 +18,7 @@ class Post(PostBase):
     class Config:
         orm_mode = True
 
-class ProductBase(BaseModel):
-    name: str
-    price: int = 0
-    is_sale: bool
-    inventory: int = 0
+class UserBase(BaseModel):
+    email: EmailStr
+    password: str
+

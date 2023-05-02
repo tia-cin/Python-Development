@@ -77,6 +77,14 @@ def create_post(new_post: schemas.PostCreate, db: Session = Depends(get_db)):
     db.refresh(created_post)
     return created_post
 
+@app.post('/users', status_code=status.HTTP_201_CREATED)
+def create_user(new_user: schemas.UserBase, db: Session = Depends(get_db)):
+    created_user = models.User(**new_user.dict())
+    db.add(created_user)
+    db.commit()
+    db.refresh(created_user)
+    return created_user
+
 # DELETE routes
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: UUID, db: Session = Depends(get_db)):
