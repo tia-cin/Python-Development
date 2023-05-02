@@ -11,6 +11,13 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
+class Post(BaseModel):
+    title: str
+    content: str
+    private: bool
+    class Config:
+        orm_mode = True
+        
 class ProductBase(BaseModel):
     name: str
     price: int = 0
