@@ -34,20 +34,20 @@ while True:
 @app.get("/posts")
 def get_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).all()
-    return {"all_posts": posts}
+    return posts
 
 
 @app.get("/posts/lastest")
 def get_lastest_posts():
     cursor.execute("""SELECT * FROM posts ORDER BY created_at LIMIT 5;""")
     posts = cursor.fetchall()
-    return {"lastest_posts": posts}
+    return posts
 
 @app.get("/posts/public")
 def get_lastest_posts():
     cursor.execute("""SELECT * FROM posts WHERE private = false;""")
     posts = cursor.fetchall()
-    return {"public_posts": posts}
+    return posts
 
 
 @app.get('/posts/{id}')
@@ -60,7 +60,7 @@ def get_post(id: UUID, db: Session = Depends(get_db)):
             detail=f"Post {id} was not found"
         )
 
-    return {"post_detail": post}
+    return post
 
 # POST routes
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
@@ -69,7 +69,7 @@ def create_post(new_post: schemas.PostCreate, db: Session = Depends(get_db)):
     db.add(created_post)
     db.commit()
     db.refresh(created_post)
-    return {"new_post": created_post}
+    return created_post
 
 # DELETE routes
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -97,4 +97,4 @@ def update_post(id: UUID, post: schemas.PostCreate, db: Session = Depends(get_db
 
     updated_post.update(post.dict(), synchronize_session=False)
     db.commit()
-    return {"updated_post": updated_post.first()}
+    return updated_post.first()
