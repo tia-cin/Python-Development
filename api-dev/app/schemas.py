@@ -12,10 +12,7 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
-class Post(BaseModel):
-    title: str
-    content: str
-    private: bool
+class Post(PostBase):
     created_at: datetime
     id: UUID
     class Config:

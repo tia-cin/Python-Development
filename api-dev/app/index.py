@@ -55,7 +55,7 @@ def get_lastest_posts(db: Session = Depends(get_db)):
     return posts
 
 
-@app.get('/posts/{id}')
+@app.get('/posts/{id}', response_model=schemas.Post)
 def get_post(id: UUID, db: Session = Depends(get_db)):
     post = db.query(models.Posts).filter(models.Posts.id == id).first()
 
@@ -92,7 +92,7 @@ def delete_post(id: UUID, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # PUT routes
-@app.put("/posts/{id}")
+@app.put("/posts/{id}", response_model=schemas.Post)
 def update_post(id: UUID, post: schemas.PostCreate, db: Session = Depends(get_db)):
     updated_post = db.query(models.Posts).filter(models.Posts.id == id)
 
