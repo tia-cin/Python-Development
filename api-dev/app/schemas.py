@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
+from datetime import datetime
 
 class PostBase(BaseModel):
     title: str
@@ -15,9 +16,11 @@ class Post(BaseModel):
     title: str
     content: str
     private: bool
+    created_at: datetime
+    id: UUID
     class Config:
         orm_mode = True
-        
+
 class ProductBase(BaseModel):
     name: str
     price: int = 0

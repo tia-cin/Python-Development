@@ -39,12 +39,19 @@ def get_posts(db: Session = Depends(get_db)):
 
 @app.get("/posts/lastest")
 def get_lastest_posts(db: Session = Depends(get_db)):
-    posts = db.query(models.Posts).order_by(model.Posts.created_at).limit(5).all()
+    posts = db.query(models.Posts).order_by(models.Posts.created_at).limit(5).all()
     return posts
 
 @app.get("/posts/public")
 def get_lastest_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).filter(models.Posts.private == False).all()
+
+    if not posts:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Public Posts not found"
+        )
+    
     return posts
 
 
