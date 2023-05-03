@@ -22,3 +22,9 @@ class UserBase(BaseModel):
     email: EmailStr
     password: str
 
+class UserOut(BaseModel):
+    id: UUID
+    email: EmailStr
+    created_at: datetime
+    class Config:
+        orm_mode = True
