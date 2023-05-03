@@ -25,6 +25,6 @@ class UserBase(BaseModel):
 class UserOut(BaseModel):
     id: UUID
     email: EmailStr
-    created_at: datetime
+    # created_at: datetime
     class Config:
         orm_mode = True
