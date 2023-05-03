@@ -9,7 +9,9 @@ from . import models, schemas
 from .db import engine, get_db
 from sqlalchemy.orm import Session
 from typing import List
+from passlib.context import CryptContext
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -79,6 +81,9 @@ def create_post(new_post: schemas.PostCreate, db: Session = Depends(get_db)):
 
 @app.post('/users', status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 def create_user(new_user: schemas.UserBase, db: Session = Depends(get_db)):
+    hashed_psw = pwd_context.hash(new_user.password)
+    new_user.password = hashed_psw
+    
     created_user = models.User(**new_user.dict())
     db.add(created_user)
     db.commit()
