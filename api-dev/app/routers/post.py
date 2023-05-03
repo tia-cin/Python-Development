@@ -5,21 +5,21 @@ from sqlalchemy.orm import Session
 from typing import List
 from uuid import uuid4, UUID
 
-router = APIRouter()
+router = APIRouter(prefix='/posts')
 
 # GET routes
-@router.get("/posts", response_model=List[schemas.Post])
+@router.get("/", response_model=List[schemas.Post])
 def get_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).all()
     return posts
 
 
-@router.get("/posts/lastest", response_model=List[schemas.Post])
+@router.get("/lastest", response_model=List[schemas.Post])
 def get_lastest_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).order_by(models.Posts.created_at).limit(5).all()
     return posts
 
-@router.get("/posts/public", response_model=List[schemas.Post])
+@router.get("/public", response_model=List[schemas.Post])
 def get_lastest_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Posts).filter(models.Posts.private == False).all()
 
@@ -32,7 +32,7 @@ def get_lastest_posts(db: Session = Depends(get_db)):
     return posts
 
 
-@router.get('/posts/{id}', response_model=schemas.Post)
+@router.get('/{id}', response_model=schemas.Post)
 def get_post(id: UUID, db: Session = Depends(get_db)):
     post = db.query(models.Posts).filter(models.Posts.id == id).first()
 
@@ -45,7 +45,7 @@ def get_post(id: UUID, db: Session = Depends(get_db)):
     return post
 
 # POST routes
-@router.post('/posts', status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
+@router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 def create_post(new_post: schemas.PostCreate, db: Session = Depends(get_db)):
     created_post = models.Posts(**new_post.dict())
     db.add(created_post)
@@ -54,7 +54,7 @@ def create_post(new_post: schemas.PostCreate, db: Session = Depends(get_db)):
     return created_post
 
 # DELETE routes
-@router.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: UUID, db: Session = Depends(get_db)):
     deleted_post = db.query(models.Posts).filter(models.Posts.id == id)
 
@@ -69,7 +69,7 @@ def delete_post(id: UUID, db: Session = Depends(get_db)):
     db.commit()
 
 # PUT routes
-@router.put("/posts/{id}", response_model=schemas.Post)
+@router.put("/{id}", response_model=schemas.Post)
 def update_post(id: UUID, post: schemas.PostCreate, db: Session = Depends(get_db)):
     updated_post = db.query(models.Posts).filter(models.Posts.id == id)
 
