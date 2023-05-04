@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from uuid import uuid4, UUID
 
-router = APIRouter(prefix='/posts')
+router = APIRouter(prefix='/posts', tags=["Posts"])
 
 # GET routes
 @router.get("/", response_model=List[schemas.Post])

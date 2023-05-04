@@ -4,7 +4,7 @@ from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from uuid import uuid4, UUID
 
-router = APIRouter(prefix='/users')
+router = APIRouter(prefix='/users', tags=["Users"])
 
 # GET routes
 @router.get('/{id}', response_model=schemas.UserOut)
