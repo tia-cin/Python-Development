@@ -12,8 +12,7 @@ router = APIRouter(prefix='/posts', tags=["Posts"])
 
 @router.get("/", response_model=List[schemas.Post])
 def get_posts(db: Session = Depends(get_db), curr_user: int = Depends(oauth2.get_curr_user)):
-    posts = db.query(models.Posts).filter(
-        models.Posts.id == curr_user.id).all()
+    posts = db.query(models.Posts).all()
     return posts
 
 
@@ -45,6 +44,12 @@ def get_post(id: UUID, db: Session = Depends(get_db), curr_user: int = Depends(o
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post {id} was not found"
+        )
+
+    if post.owner_id != oauth2.get_curr_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not Authorized to perform requested action"
         )
 
     return post
