@@ -7,6 +7,8 @@ from uuid import uuid4, UUID
 router = APIRouter(prefix='/users', tags=["Users"])
 
 # GET routes
+
+
 @router.get('/{id}', response_model=schemas.UserOut)
 def get_user(id: UUID, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == id).first()
