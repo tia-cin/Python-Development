@@ -15,6 +15,7 @@ class PostCreate(PostBase):
 class Post(PostBase):
     created_at: datetime
     id: UUID
+    owner_id: UUID
     class Config:
         orm_mode = True
 
