@@ -15,6 +15,8 @@ class Posts(Base):
     private = Column(Boolean, server_default='TRUE')
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 
+    owner_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+
 class User(Base):
     __tablename__ = "users"
 
