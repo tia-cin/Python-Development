@@ -11,15 +11,15 @@ router = APIRouter(prefix='/posts', tags=["Posts"])
 
 
 @router.get("/", response_model=List[schemas.Post])
-def get_posts(db: Session = Depends(get_db), curr_user: int = Depends(oauth2.get_curr_user)):
-    posts = db.query(models.Posts).all()
+def get_posts(db: Session = Depends(get_db), curr_user: int = Depends(oauth2.get_curr_user), limit: int = 5, skip: int = 0):
+    posts = db.query(models.Posts).limit(limit).ofset(skip).all()
     return posts
 
 
 @router.get("/lastest", response_model=List[schemas.Post])
-def get_lastest_posts(db: Session = Depends(get_db), curr_user: int = Depends(oauth2.get_curr_user)):
+def get_lastest_posts(db: Session = Depends(get_db), curr_user: int = Depends(oauth2.get_curr_user), limit: int = 5):
     posts = db.query(models.Posts).order_by(
-        models.Posts.created_at).limit(5).all()
+        models.Posts.created_at).limit(limit).all()
     return posts
 
 
