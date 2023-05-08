@@ -34,3 +34,12 @@ class User(Base):
                         nullable=False, server_default=text('now()'))
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+
+    user_id = Column(UUID(as_uuid=True), ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False, primary_key=True)
+    post_id = Column(UUID(as_uuid=True), ForeignKey(
+        "posts.id", ondelete="CASCADE"), nullable=False, primary_key=True)
