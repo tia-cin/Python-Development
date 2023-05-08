@@ -1,9 +1,10 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+from .config import setting
 
 # to be changed for security
-SQLALCHEMY_DB_URL = 'postgresql://postgres:data123@localhost/apidev'
+SQLALCHEMY_DB_URL = f'postgresql://{setting.db_un}:{setting.db_psw}@{setting.db_host}:{setting.db_port}/{setting.db_name}'
 
 engine = create_engine(SQLALCHEMY_DB_URL)
 
