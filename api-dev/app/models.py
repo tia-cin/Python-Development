@@ -14,14 +14,12 @@ class Posts(Base):
                 nullable=False, server_default=text('gen_random_uuid()'))
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
-    private = Column(Boolean, server_default='TRUE')
     content = Column(String, nullable=False)
     title = Column(String, nullable=False)
-
     owner_id = Column(UUID(as_uuid=True), ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
 
-    ownner = relationship("User")
+    owner = relationship("User")
 
 
 class User(Base):
