@@ -39,9 +39,10 @@ def get_lastest_posts(db: Session = Depends(get_db), curr_user: str = Depends(oa
     return posts
 
 
-@router.get('/{id}', response_model=schemas.Post)
+@router.get('/{id}', response_model=schemas.PostOut)
 def get_post(id: UUID, db: Session = Depends(get_db), curr_user: str = Depends(oauth2.get_curr_user)):
-    post = db.query(models.Posts).filter(models.Posts.id == id).first()
+    post = db.query(models.Posts, func.count(models.Vote.post_id).label("votes")).join(
+        models.Vote, models.Vote.post_id == models.Posts.id, isouter=True).group_by(models.Posts.id).filter(models.Posts.id == id).first()
 
     if not post:
         raise HTTPException(
