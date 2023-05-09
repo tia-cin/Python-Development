@@ -13,12 +13,10 @@ router = APIRouter(prefix='/posts', tags=["Posts"])
 
 @router.get("/")
 def get_posts(db: Session = Depends(get_db), curr_user: UUID = Depends(oauth2.get_curr_user), limit: int = 5, skip: int = 0, search: Optional[str] = ""):
-    posts = db.query(models.Posts).filter(
+    posts = db.query(models.Posts, func.count(models.Vote.post_id).label("votes")).join(
+        models.Vote, models.Vote.post_id == models.Posts.id, isouter=True).group_by(models.Posts.id).filter(
         models.Posts.title.contains(search)).limit(limit).offset(skip).all()
-
-    result = db.query(models.Posts, func.count(models.Vote.post_id).label("votes")).join(
-        models.Vote, models.Vote.post_id == models.Posts.id, isouter=True).group_by(models.Posts.id).all()
-    return result
+    return posts
 
 
 @router.get("/lastest", response_model=List[schemas.Post])
