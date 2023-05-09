@@ -8,7 +8,6 @@ from uuid import UUID
 class PostBase(BaseModel):
     title: str
     content: str
-    likes: Optional[int] = 0
     private: bool = True
 
 
@@ -29,7 +28,7 @@ class Post(PostBase):
     created_at: datetime
     id: UUID
     owner_id: UUID
-    owner: UserOut
+    # owner: UserOut
 
     class Config:
         orm_mode = True

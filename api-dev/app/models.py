@@ -15,7 +15,6 @@ class Posts(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
     private = Column(Boolean, server_default='TRUE')
-    likes = Column(Integer, server_default='0')
     content = Column(String, nullable=False)
     title = Column(String, nullable=False)
 
