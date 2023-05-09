@@ -29,7 +29,15 @@ class Post(PostBase):
     created_at: datetime
     id: UUID
     owner_id: UUID
-    # owner: UserOut
+    owner: UserOut
+
+    class Config:
+        orm_mode = True
+
+
+class PostOut(BaseModel):
+    Post: Post
+    votes: int
 
     class Config:
         orm_mode = True
