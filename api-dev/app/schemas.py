@@ -28,7 +28,7 @@ class Post(PostBase):
     created_at: datetime
     id: UUID
     owner_id: UUID
-    # owner: UserOut
+    owner: UserOut
 
     class Config:
         orm_mode = True

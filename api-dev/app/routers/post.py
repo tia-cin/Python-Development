@@ -3,6 +3,7 @@ from .. import models, schemas, oauth2
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from uuid import uuid4, UUID
+from sqlalchemy import func
 from ..db import get_db
 
 router = APIRouter(prefix='/posts', tags=["Posts"])
@@ -10,11 +11,14 @@ router = APIRouter(prefix='/posts', tags=["Posts"])
 # GET routes
 
 
-@router.get("/", response_model=List[schemas.Post])
-def get_posts(db: Session = Depends(get_db), curr_user: str = Depends(oauth2.get_curr_user), limit: int = 5, skip: int = 0, search: Optional[str] = ""):
+@router.get("/")
+def get_posts(db: Session = Depends(get_db), curr_user: UUID = Depends(oauth2.get_curr_user), limit: int = 5, skip: int = 0, search: Optional[str] = ""):
     posts = db.query(models.Posts).filter(
         models.Posts.title.contains(search)).limit(limit).offset(skip).all()
-    return posts
+
+    result = db.query(models.Posts, func.count(models.Vote.post_id).label("votes")).join(
+        models.Vote, models.Vote.post_id == models.Posts.id, isouter=True).group_by(models.Posts.id).all()
+    return result
 
 
 @router.get("/lastest", response_model=List[schemas.Post])
