@@ -1,8 +1,11 @@
 __pycache__
+_pycache_
 *.pyc
 *.pyo
 *.exe
+*.cfg
 .env
 venv/
 Libs/
-.vscode
+Scripts/
+Include/
