@@ -23,11 +23,13 @@
 ## :dart: About
 
 - [Algorythms](https://github.com/tia-cin/Python-Web-Development/tree/main/algorithms)
+
   - Binary Search
   - Insertion Sort
   - Merge Sort
   - Quick Sort
   - Selection Sort
+
 - [Basics](https://github.com/tia-cin/Python-Web-Development/tree/main/basics)
   - APIs
   - Calculator example
@@ -36,12 +38,14 @@
   - SQLite3
   - Classes and Objects
 - [Data-Structures](https://github.com/tia-cin/Python-Web-Development/tree/main/data-structures)
+
   - Binary Search Tree
   - Double Linked List
   - Queue
   - Single Linked List
   - Stack
   - Trie
+
 - [Projects](https://github.com/tia-cin/Python-Web-Development/tree/main/projects)
 
   - Graph Composer
@@ -52,7 +56,9 @@
   - Rock-Paper-Scissors
   - Sudoku Solver
   - Tic-Tac-Toe
-  - [API Development](https://github.com/tia-cin/Python-Web-Development/tree/main/api-dev)
+
+- [API Development](https://github.com/tia-cin/Python-Web-Development/tree/main/api-dev)
+
   - API provides access to a database, and allows users to retrieve, create, update, and delete data
   - API design fundamentals, including routes, serialization/deserialization, schema validation, and models
   - SQL database integration
